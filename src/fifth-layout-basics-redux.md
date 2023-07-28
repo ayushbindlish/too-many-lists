@@ -32,7 +32,7 @@ And here's our new layout:
 ```rust
 pub struct List<T> {
     head: Link<T>,
-    tail: *mut Node<T>,
+    tail: Link<T>,
 }
 
 type Link<T> = *mut Node<T>; // MUCH BETTER
@@ -52,7 +52,7 @@ Remember: Option isn't as nice or useful when we're using raw pointers, so we're
 List::new is basically the same.
 
 ```rust ,ignore
-use ptr;
+use std::ptr;
 
 impl<T> List<T> {
     pub fn new() -> Self {
@@ -75,7 +75,7 @@ Well, we *could* with `std::alloc::alloc`, but that's like bringing a katana int
 
 We want to *have* boxes, but, *not*. One completely wild but *maybe* viable option would be to do something like this:
 
-```
+```rust ,ignore
 struct Node<T> {
     elem: T,
     real_next: Option<Box<Node<T>>>,

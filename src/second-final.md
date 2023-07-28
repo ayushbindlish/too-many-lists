@@ -51,11 +51,11 @@ impl<T> List<T> {
         IntoIter(self)
     }
 
-    pub fn iter(&self) -> Iter<'_, T> {
+    pub fn iter(&self) -> Iter<T> {
         Iter { next: self.head.as_deref() }
     }
 
-    pub fn iter_mut(&mut self) -> IterMut<'_, T> {
+    pub fn iter_mut(&mut self) -> IterMut<T> {
         IterMut { next: self.head.as_deref_mut() }
     }
 }
@@ -93,7 +93,7 @@ impl<'a, T> Iterator for Iter<'a, T> {
     }
 }
 
-pub struct IterMut<'a, T> {
+pub struct IterMut<'a, T: 'a> {
     next: Option<&'a mut Node<T>>,
 }
 
@@ -180,6 +180,13 @@ mod test {
         assert_eq!(iter.next(), Some(&3));
         assert_eq!(iter.next(), Some(&2));
         assert_eq!(iter.next(), Some(&1));
+        assert_eq!(iter.next(), None);
+
+        let mut iter = list.iter();
+        assert_eq!(iter.next(), Some(&3));
+        assert_eq!(iter.next(), Some(&2));
+        assert_eq!(iter.next(), Some(&1));
+        assert_eq!(iter.next(), None);
     }
 
     #[test]
@@ -191,9 +198,9 @@ mod test {
         assert_eq!(iter.next(), Some(&mut 3));
         assert_eq!(iter.next(), Some(&mut 2));
         assert_eq!(iter.next(), Some(&mut 1));
+        assert_eq!(iter.next(), None);
     }
 }
-
 ```
 
 Getting beefier!

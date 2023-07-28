@@ -471,6 +471,8 @@ See, map is a generic function:
 
 ```rust ,ignore
 pub fn map<U, F>(self, f: F) -> Option<U>
+where
+  F: FnOnce(T) -> U
 ```
 
 The turbofish, `::<>`, lets us tell the compiler what we think the types of those
@@ -495,6 +497,13 @@ fn iter() {
     assert_eq!(iter.next(), Some(&3));
     assert_eq!(iter.next(), Some(&2));
     assert_eq!(iter.next(), Some(&1));
+    assert_eq!(iter.next(), None);
+
+    let mut iter = list.iter();
+    assert_eq!(iter.next(), Some(&3));
+    assert_eq!(iter.next(), Some(&2));
+    assert_eq!(iter.next(), Some(&1));
+    assert_eq!(iter.next(), None);
 }
 ```
 
@@ -515,6 +524,11 @@ test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured
 ```
 
 Heck yeah.
+
+We can also note that, contrary to `into_iter`, `iter` allows us to iterate
+multiple time over the same list. This is the advantage of using `&self` instead
+of `self` in the function definition, the function `iter` did not require us to
+move the list.
 
 Finally, it should be noted that we *can* actually apply lifetime elision here:
 

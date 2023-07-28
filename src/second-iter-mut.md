@@ -36,9 +36,10 @@ let mut list = List::new();
 list.push(1); list.push(2); list.push(3);
 
 let mut iter = list.iter();
-let x = iter.next().unwrap();
-let y = iter.next().unwrap();
-let z = iter.next().unwrap();
+let ref_to = iter.next().unwrap();
+let x = ref_to;
+let y = ref_to;
+let z = ref_to;
 ```
 
 Cool!
@@ -162,6 +163,13 @@ fn iter_mut() {
     assert_eq!(iter.next(), Some(&mut 3));
     assert_eq!(iter.next(), Some(&mut 2));
     assert_eq!(iter.next(), Some(&mut 1));
+    assert_eq!(iter.next(), None);
+
+    let mut iter = list.iter_mut();
+    assert_eq!(iter.next(), Some(&mut 3));
+    assert_eq!(iter.next(), Some(&mut 2));
+    assert_eq!(iter.next(), Some(&mut 1));
+    assert_eq!(iter.next(), None);
 }
 ```
 

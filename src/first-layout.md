@@ -80,20 +80,20 @@ Lesse here...
 >
 > Creating a recursive data structure:
 >
-```rust
-#[derive(Debug)]
-enum List<T> {
-    Cons(T, Box<List<T>>),
-    Nil,
-}
-```
+> ```rust
+> #[derive(Debug)]
+> enum List<T> {
+>     Cons(T, Box<List<T>>),
+>     Nil,
+> }
+> ```
 >
-```rust ,ignore
-fn main() {
-    let list: List<i32> = List::Cons(1, Box::new(List::Cons(2, Box::new(List::Nil))));
-    println!("{:?}", list);
-}
-```
+> ```rust ,ignore
+> fn main() {
+>     let list: List<i32> = List::Cons(1, Box::new(List::Cons(2, Box::new(List::Nil))));
+>     println!("{:?}", list);
+> }
+> ```
 >
 > This will print `Cons(1, Box(Cons(2, Box(Nil))))`.
 >
@@ -264,7 +264,7 @@ C-like: structs!
 
 While enums let us declare a type that can contain *one* of several values,
 structs let us declare a type that contains *many* values at once. Let's break
-our List into two types: A List, and a Node.
+our List into two types: a List, and a Node.
 
 As before, a List is either Empty or has an element followed by another List.
 By representing the "has an element followed by another List" case by an
@@ -312,15 +312,15 @@ Rust is mad at us again. We marked the `List` as public (because we want people
 to be able to use it), but not the `Node`. The problem is that the internals of
 an `enum` are totally public, and we're not allowed to publicly talk about
 private types. We could make all of `Node` totally public, but generally in Rust
-we favour keeping implementation details private. Let's make `List` a struct, so
+we favour keeping implementation details private. Let's wrap `List` inside a struct, so
 that we can hide the implementation details:
 
 ```rust ,ignore
-pub struct List {
+pub struct List {  // our new wrapper struct
     head: Link,
 }
 
-enum Link {
+enum Link {  // previously known as List
     Empty,
     More(Box<Node>),
 }
